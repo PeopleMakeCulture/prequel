@@ -3,9 +3,12 @@ const app = express();
 
 app.use(express.json())
 
+
+// TODO: sources have source_id
 // Dummy Data - BQ
 const SOURCE_SEED = {
   "source": {
+    "id": "1a",
     "vendor": "bigquery",
     "service_account_key": {},
     "name": "orders",
@@ -18,12 +21,13 @@ const SOURCE_SEED = {
 
 const source_list = [SOURCE_SEED]
 
-
+// TODO: destinations have destination_id
 // Dummy Data - Google Sheets
 // NOTE: Enabled models is required
 
 const DEST_SEED = {
   "destination": {
+    "id": "1a",
     "vendor": "google_sheets",
     "enabled_models": [
       "*"
@@ -36,6 +40,18 @@ const DEST_SEED = {
 }
 
 const dest_list = [DEST_SEED]
+
+const RECIPIENT_SEED = {
+  "recipient": {
+    "products": [
+      "data_product_one"
+    ],
+    "name": "recipient_one",
+    "id_in_provider_system": "recipient_id_one"
+  }
+}
+
+const recipient_list = [RECIPIENT_SEED]
 
 // Home
 app.get('/api', (req, res) => {
@@ -74,7 +90,23 @@ app.post('/api/destinations', (req, res, next) => {
   res.status(201).json({ message: 'New destination created successfully!', destination: newDestination });
 });
 
+// POST:
+app.post('/api.prequel.co/destinations/{destination_id}/transfer', (req, res, next) => {
+  const newTransfer = req.body.destination;
+  dest_list.push(newDestination);
+  res.status(201).json({ message: 'New destination created successfully!', destination: newDestination });
+});
 
+// TODO: 
+
+// ADD POST METHOD FOR TRANSFER
+// '/api.prequel.co/destinations/{destination_id}/transfer'
+// if no req.body, all models will be fully refreshed for that destination_id
+// internally, there must be a scheduler that makes a post request to this endpoint 
+// that matches frequency for each dest
+
+
+// OPT: create /recipient GET and POST methods. destinations (destination_id) belong to recipients (recipient_id) 
 
 // server
 const port = 3000;
