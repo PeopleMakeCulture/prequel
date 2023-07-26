@@ -3,9 +3,13 @@ const app = express();
 
 app.use(express.json())
 
+/*
+~~~~~~~~~~~~~~~~~
+SEED DATA
+~~~~~~~~~~~~~~~~~
+*/
 
-// TODO: sources have source_id
-// Dummy Data - BQ
+// BigQuery Source Config
 const SOURCE_SEED = {
   "source": {
     "id": "1a",
@@ -21,10 +25,9 @@ const SOURCE_SEED = {
 
 const source_list = [SOURCE_SEED]
 
-// TODO: destinations have destination_id
-// Dummy Data - Google Sheets
-// NOTE: Enabled models is required
 
+// Google Sheets Destination Config (no schema required)
+// NOTE: Enabled models is required
 const DEST_SEED = {
   "destination": {
     "id": "1a",
@@ -52,6 +55,12 @@ const RECIPIENT_SEED = {
 }
 
 const recipient_list = [RECIPIENT_SEED]
+
+/*
+~~~~~~~~~~~~~~~~~
+ROUTES
+~~~~~~~~~~~~~~~~~
+*/
 
 // Home
 app.get('/api', (req, res) => {
